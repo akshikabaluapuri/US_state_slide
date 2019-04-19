@@ -1,0 +1,105 @@
+---
+title: "Income, Life-Expectancy,& Population"
+author: "Akshika Baluapuri"
+date: "April 11, 2019"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r ,comment= " ", warning=FALSE , message=FALSE}
+
+library(plotly)
+library(leaflet)
+
+```
+## Income, Population & Life-Expectancy
+
+```{r, comment= " ", warning= FALSE}
+st <- data.frame(state.x77, state.abb, state.area, state.region, state.division, state.center, state.name)
+
+
+t <- plot_ly(st, x = st$Income, y = st$Population , type = 'scatter',color = st$Life.Exp,size = st$Income,
+              sizes = c(10, 50),
+             mode = "markers", marker = list( opacity = 0.5,sizemode = 'diameter'),
+             hoverinfo = 'text',
+             text = paste('State Name =', state.name)) %>%
+  colorbar(title = "Life expectancy in years")%>%
+  layout(title = "x = Income, y = Population ",
+         xaxis = list(title = "Per capita income",
+         yaxis = list(title = "Population")))
+       
+t
+```
+
+
+## Per capita income and Population 
+
+```{r}
+  a <-  plot_ly(st, x = st$state.name, y = st$Income, type = 'bar', name = "Income" ) %>%
+  add_trace(y = st$Population, name = 'Population') %>%
+  layout(title= "BarChart" , yaxis = list(title = 'Income & Population'), barmode = 'group')
+a
+```
+
+
+
+## Illiteracy percent of population
+
+```{r}
+ I <- plot_ly(st, labels = st$state.name, values = st$Illiteracy, type = 'pie') %>%
+  layout( 
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+I
+```
+
+## High-school Graduate Rate
+
+
+```{r}
+h <- plot_ly(st, labels = st$state.name, values = st$HS.Grad, type = 'pie') %>%
+  layout(
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+h
+```
+
+
+## Murder and non-negligent manslaughter rate per 100,000 population
+```{r}
+  m <- plot_ly(st, labels = st$state.name, values = st$Murder, type = 'pie') %>%
+  layout(
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+m
+```
+
+
+
+
+
+## Collected Data of States 
+```{r}
+
+
+d <- data.frame(lat = st$y,
+                lng = st$x)
+d%>%
+leaflet()%>%
+    addTiles()%>%
+  addCircleMarkers(popup = st$state.name)
+
+
+```
+
+
+
+
+## Thanks
+
+
+
